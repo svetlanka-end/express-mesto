@@ -71,6 +71,7 @@ module.exports.sendNewAvatar = (req, res) => {
     { avatar: link },
     { new: true, runValidators: true }
   )
+    .orFail(new TypeError())
     .then((user) =>
       res.send({
         name: user.name,
@@ -85,7 +86,7 @@ module.exports.sendNewAvatar = (req, res) => {
           message: "Переданы некорректные данные при обновлении профиля",
         });
       }
-      if (err.name === "CastError") {
+      if (err.name === "TypeError") {
         return res.status(404).send({
           message: "Запрашиваемый пользователь не найден",
         });
@@ -102,6 +103,7 @@ module.exports.sendNewProfilData = (req, res) => {
     { name, about },
     { new: true, runValidators: true }
   )
+    .orFail(new TypeError())
     .then((user) =>
       res.send({
         name: user.name,
@@ -116,11 +118,12 @@ module.exports.sendNewProfilData = (req, res) => {
           message: "Переданы некорректные данные при обновлении профиля",
         });
       }
-      if (err.name === "CastError") {
+      if (err.name === "TypeError") {
         return res.status(404).send({
           message: "Запрашиваемый пользователь не найден",
         });
       }
+      console.log(err.name);
       return res.status(500).send({ message: "Произошла ошибка" });
     });
 };

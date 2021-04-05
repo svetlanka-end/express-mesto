@@ -47,8 +47,7 @@ module.exports.deleteCardById = (req, res) => {
 module.exports.getCards = (req, res) => {
   Card.find()
     .populate(["owner", "likes"])
-    .orFail(new Error("NotValid"))
-    .then((cards) =>
+    .then((cards) => {
       res.send(
         cards.map((card) => ({
           name: card.name,
@@ -62,9 +61,11 @@ module.exports.getCards = (req, res) => {
           },
           likes: card.likes,
         }))
-      )
-    )
-    .catch(() => res.status(500).send({ message: "Произошла ошибка" }));
+      );
+    })
+    .catch((err) => {
+      return res.status(500).send({ message: "Произошла ошибка" });
+    });
 };
 
 module.exports.likeCard = (req, res) => {
