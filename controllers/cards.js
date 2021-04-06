@@ -48,20 +48,7 @@ module.exports.getCards = (req, res) => {
   Card.find()
     .populate(["owner", "likes"])
     .then((cards) => {
-      res.send(
-        cards.map((card) => ({
-          name: card.name,
-          link: card.link,
-          _id: card._id,
-          owner: {
-            name: card.owner.name,
-            about: card.owner.about,
-            avatar: card.owner.avatar,
-            _id: card.owner._id,
-          },
-          likes: card.likes,
-        }))
-      );
+      res.send(cards);
     })
     .catch((err) => {
       return res.status(500).send({ message: "Произошла ошибка" });
